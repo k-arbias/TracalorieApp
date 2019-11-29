@@ -42,6 +42,8 @@ const UICtrl = (function(){
                 </li>
                 `;
             });
+
+            document.querySelector('#item-list').innerHTML = html;
         }
     }
 
