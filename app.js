@@ -10,9 +10,9 @@ const ItemCtrl = (function(){
 
     const data = {
         items: [
-            {id: 0, name: 'Steak Dinner', calories: 1200},
-            {id: 1, name: 'Cookie', calories: 400},
-            {id: 2, name: 'Eggs', calories: 300}
+            // {id: 0, name: 'Steak Dinner', calories: 1200},
+            // {id: 1, name: 'Cookie', calories: 400},
+            // {id: 2, name: 'Eggs', calories: 300}
         ],
         currentItem: null,
         totalCalories: 0
@@ -72,6 +72,7 @@ const UICtrl = (function(){
             }
         },
         addListItem: function(item){
+            document.querySelector(UISelectors.itemList).style.display = 'block';
             //Create li element
             const li = document.createElement('li');
             //Add class
@@ -89,6 +90,9 @@ const UICtrl = (function(){
         clearInput: function(){
             document.querySelector(UISelectors.itemNameInput).value = '';
             document.querySelector(UISelectors.itemCaloriesInput).value = '';
+        },
+        hideList: function(){
+            document.querySelector(UISelectors.itemList).style.display = 'none';
         },
         getSelectors: function(){
             return UISelectors;
@@ -121,7 +125,11 @@ const App = (function(ItemCtrl, UICtrl){
         init: function(){
             const items = ItemCtrl.getItems();
 
-            UICtrl.populateItemList(items);
+            if(items.length === 0){
+                UICtrl.hideList();
+            }else {
+                UICtrl.populateItemList(items);
+            }
 
             loadEventListeners();
         }
