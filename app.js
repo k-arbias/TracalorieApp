@@ -3,7 +3,7 @@ const StorageCtrl = (function(){
 
     return{
         storeItem: function(item){
-            let items = [];
+            let items;
             //Check if any items in LS
             if(localStorage.getItem('items') === null){
                 items = [];
@@ -19,6 +19,15 @@ const StorageCtrl = (function(){
                 //Reset LS
                 localStorage.setItem('items', JSON.stringify(items));
             }
+        },
+        getItemsFromStorage: function(){
+            let items;
+            if(localStorage.getItem('items') === null){
+                items = [];
+            }else {
+                items = JSON.parse(localStorage.getItem('items'));
+            }
+            return items;
         }
     }
 })();
@@ -31,7 +40,7 @@ const ItemCtrl = (function(){
     }
 
     const data = {
-        items: [],
+        items: StorageCtrl.getItemsFromStorage(),
         currentItem: null,
         totalCalories: 0
     }
