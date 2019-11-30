@@ -1,5 +1,27 @@
 //Storage Controller
+const StorageCtrl = (function(){
 
+    return{
+        storeItem: function(item){
+            let items = [];
+            //Check if any items in LS
+            if(localStorage.getItem('items') === null){
+                items = [];
+                //Push new item
+                items.push(item);
+                //Set LS
+                localStorage.setItem('items', JSON.stringify(items));
+            }else {
+                //Get what is in LS
+                items = JSON.parse(localStorage.getItem('items'));
+                //Push new item
+                items.push(item);
+                //Reset LS
+                localStorage.setItem('items', JSON.stringify(items));
+            }
+        }
+    }
+})();
 //Item Controller
 const ItemCtrl = (function(){
     const Item = function(id, name, calories){
@@ -9,11 +31,7 @@ const ItemCtrl = (function(){
     }
 
     const data = {
-        items: [
-            // {id: 0, name: 'Steak Dinner', calories: 1200},
-            // {id: 1, name: 'Cookie', calories: 400},
-            // {id: 2, name: 'Eggs', calories: 300}
-        ],
+        items: [],
         currentItem: null,
         totalCalories: 0
     }
@@ -206,7 +224,7 @@ const UICtrl = (function(){
 
 })();
 //App Controller
-const App = (function(ItemCtrl, UICtrl){
+const App = (function(ItemCtrl,StorageCtrl, UICtrl){
     const loadEventListeners = function(){
         const UISelectors = UICtrl.getSelectors();
 
@@ -242,6 +260,8 @@ const App = (function(ItemCtrl, UICtrl){
             const totalCalories = ItemCtrl.getTotalCalories();
             //Add total calories to UI
             UICtrl.showTotalCalories(totalCalories);
+            //Store in localStorage
+            StorageCtrl.storeItem(newItem);
             //Clear Fields
             UICtrl.clearInput();
         }
@@ -333,7 +353,7 @@ const App = (function(ItemCtrl, UICtrl){
         }
     }
 
-})(ItemCtrl, UICtrl);
+})(ItemCtrl,StorageCtrl, UICtrl);
 
 //Initialize App
 App.init();
