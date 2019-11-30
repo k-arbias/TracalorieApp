@@ -57,6 +57,9 @@ const UICtrl = (function(){
     const UISelectors = {
         itemList: '#item-list',
         addBtn: '.add-btn',
+        updateBtn: '.update-btn',
+        deleteBtn: '.delete-btn',
+        backbtn: '.back-btn',
         itemNameInput: '#item-name',
         itemCaloriesInput: '#item-calories',
         totalCalories: '.total-calories'
@@ -107,6 +110,13 @@ const UICtrl = (function(){
         showTotalCalories: function(totalCalories){
            document.querySelector(UISelectors.totalCalories).textContent = totalCalories;
         },
+        clearEditState: function(){
+            UICtrl.clearInput();
+            document.querySelector(UISelectors.updateBtn).style.display = 'none';
+            document.querySelector(UISelectors.deleteBtn).style.display = 'none';
+            document.querySelector(UISelectors.backbtn).style.display = 'none';
+            document.querySelector(UISelectors.addBtn).style.display = 'inline';
+        },
         getSelectors: function(){
             return UISelectors;
         }
@@ -140,6 +150,8 @@ const App = (function(ItemCtrl, UICtrl){
     }
     return {
         init: function(){
+            //Clear edit state
+            UICtrl.clearEditState();
             const items = ItemCtrl.getItems();
 
             if(items.length === 0){
@@ -147,6 +159,10 @@ const App = (function(ItemCtrl, UICtrl){
             }else {
                 UICtrl.populateItemList(items);
             }
+            //Get total calories
+            const totalCalories = ItemCtrl.getTotalCalories();
+            //Add total calories to UI
+            UICtrl.showTotalCalories(totalCalories);
 
             loadEventListeners();
         }
